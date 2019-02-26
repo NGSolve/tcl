@@ -51,6 +51,8 @@
 #undef TclSockMinimumBuffers
 #undef Tcl_SetIntObj
 #undef TclStaticPackage
+#undef TclBNInitBignumFromLong
+#undef Tcl_BackgroundError
 #define TclStaticPackage Tcl_StaticPackage
 
 #ifdef TCL_MEM_DEBUG
@@ -70,6 +72,7 @@
 #   define TclpIsAtty 0
 #elif defined(__CYGWIN__)
 #   define TclpIsAtty TclPlatIsAtty
+
 static void
 doNothing(void)
 {
@@ -725,17 +728,17 @@ const TclTomMathStubs tclTomMathStubs = {
     TclBN_mp_unsigned_bin_size, /* 47 */
     TclBN_mp_xor, /* 48 */
     TclBN_mp_zero, /* 49 */
-    TclBN_reverse, /* 50 */
-    TclBN_fast_s_mp_mul_digs, /* 51 */
-    TclBN_fast_s_mp_sqr, /* 52 */
-    TclBN_mp_karatsuba_mul, /* 53 */
-    TclBN_mp_karatsuba_sqr, /* 54 */
-    TclBN_mp_toom_mul, /* 55 */
-    TclBN_mp_toom_sqr, /* 56 */
-    TclBN_s_mp_add, /* 57 */
-    TclBN_s_mp_mul_digs, /* 58 */
-    TclBN_s_mp_sqr, /* 59 */
-    TclBN_s_mp_sub, /* 60 */
+    0, /* 50 */
+    0, /* 51 */
+    0, /* 52 */
+    0, /* 53 */
+    0, /* 54 */
+    0, /* 55 */
+    0, /* 56 */
+    0, /* 57 */
+    0, /* 58 */
+    0, /* 59 */
+    0, /* 60 */
     TclBN_mp_init_set_int, /* 61 */
     TclBN_mp_set_int, /* 62 */
     TclBN_mp_cnt_lsb, /* 63 */
