@@ -217,16 +217,47 @@ matrix:
     - name: "Windows/MSVC/Shared/no test"
       os: windows
       compiler: cl
+      env:
+        - BUILD_DIR=win
+        - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
+        - CFGOPT="CC=cl --enable-threads"
+      before_install: &vcpreinst
+        - choko install make
+        - PATH="$PATH:$VCDIR"
+        - cd ${BUILD_DIR}
+       script:
+        - make all tcltest
+    - name: "Windows/MSVC/Static/no test"
+      os: windows
+      compiler: cl
+      env:
+        - BUILD_DIR=win
+        - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
+        - CFGOPT="CC=cl --enable-threads --disable-shared"
+      before_install: *vcpreinst
+      script:
+        - make all tcltest
+    - name: "Windows/MSVC/Debug/no test"
+      os: windows
+      compiler: cl
+      env:
+        - BUILD_DIR=win
+        - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
+        - CFGOPT="CC=cl --enable-threads --enable-symbols"
+      before_install: *vcpreinst
+      script:
+        - make all tcltest
+    - name: "Windows/MSVC/Shared/nmake/no test"
+      os: windows
+      compiler: cl
       env: &vcenv
         - BUILD_DIR=win
         - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
-      before_install: &vcpreinst
-        - PATH="$PATH:$VCDIR"
-        - cd ${BUILD_DIR}
+      before_install: *vcpreinst
       install: []
       script:
         - cmd.exe /C 'vcvarsall.bat x64 && nmake -f makefile.vc all tcltest'
-    - name: "Windows/MSVC/Static/no test"
+    - name: "Windows/MSVC/Static/nmake/no test"
       os: windows
       compiler: cl
       env: *vcenv
@@ -234,7 +265,7 @@ matrix:
       install: []
       script:
         - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=static -f makefile.vc all tcltest'
-    - name: "Windows/MSVC/Debug/no test"
+    - name: "Windows/MSVC/Debug/nmake/no test"
       os: windows
       compiler: cl
       env: *vcenv
