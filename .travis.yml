@@ -225,8 +225,8 @@ matrix:
         - choko install make
         - PATH="$PATH:$VCDIR"
         - cd ${BUILD_DIR}
-       script:
-        - make all tcltest
+      script:
+        - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
     - name: "Windows/MSVC/Static/no test"
       os: windows
       compiler: cl
@@ -236,7 +236,7 @@ matrix:
         - CFGOPT="CC=cl --enable-threads --disable-shared"
       before_install: *vcpreinst
       script:
-        - make all tcltest
+        - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
     - name: "Windows/MSVC/Debug/no test"
       os: windows
       compiler: cl
@@ -246,7 +246,7 @@ matrix:
         - CFGOPT="CC=cl --enable-threads --enable-symbols"
       before_install: *vcpreinst
       script:
-        - make all tcltest
+        - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
     - name: "Windows/MSVC/Shared/nmake/no test"
       os: windows
       compiler: cl
