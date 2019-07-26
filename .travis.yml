@@ -222,8 +222,8 @@ matrix:
         - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
         - CFGOPT="CC=cl --enable-threads"
       before_install: &vcpreinst
-        - choko install make
-        - PATH="$PATH:$VCDIR"
+        - choco install -r --no-progress -y msys2 make
+        - PATH="/c/tools/msys64/usr/bin/:$PATH:$VCDIR"
         - cd ${BUILD_DIR}
       script:
         - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
