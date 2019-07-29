@@ -223,8 +223,10 @@ matrix:
         - CFGOPT="CC=cl --enable-threads"
       before_install: &vcpreinst
         - choco install -r --no-progress -y msys2 make
-        - PATH="/c/tools/msys64/usr/bin/:$PATH:$VCDIR"
+        - export PATH="/c/tools/msys64/usr/bin/:$PATH:$VCDIR"
         - cd ${BUILD_DIR}
+      install:
+        - cmd.exe /C 'vcvarsall.bat x64 && bash ./configure ${CFGOPT} --prefix=$HOME'
       script:
         - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
     - name: "Windows/MSVC/Static/no test"
@@ -235,6 +237,8 @@ matrix:
         - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
         - CFGOPT="CC=cl --enable-threads --disable-shared"
       before_install: *vcpreinst
+      install:
+        - cmd.exe /C 'vcvarsall.bat x64 && bash ./configure ${CFGOPT} --prefix=$HOME'
       script:
         - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
     - name: "Windows/MSVC/Debug/no test"
@@ -245,6 +249,8 @@ matrix:
         - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
         - CFGOPT="CC=cl --enable-threads --enable-symbols"
       before_install: *vcpreinst
+      install:
+        - cmd.exe /C 'vcvarsall.bat x64 && bash ./configure ${CFGOPT} --prefix=$HOME'
       script:
         - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
     - name: "Windows/MSVC/Shared/nmake/no test"
