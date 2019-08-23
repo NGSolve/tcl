@@ -214,8 +214,8 @@ matrix:
         - BUILD_DIR=win
         - CFGOPT="--host=x86_64-w64-mingw32 --enable-64bit --enable-symbols"
       script: *crosstest
-# Test on Windows with MSVC native
-    - name: "Windows/MSVC/Shared"
+# Test on Windows with MSVC native, using nmake
+    - name: "Windows/MSVC/Shared/nmake"
       os: windows
       compiler: cl
       env: &vcenv
@@ -228,7 +228,7 @@ matrix:
       script:
         - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=threads -f makefile.vc all tcltest'
         - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=threads -f makefile.vc test'
-    - name: "Windows/MSVC/Static"
+    - name: "Windows/MSVC/Static/nmake"
       os: windows
       compiler: cl
       env: *vcenv
@@ -237,6 +237,33 @@ matrix:
       script:
         - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=static,msvcrt,threads -f makefile.vc all tcltest'
         - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=static,msvcrt,threads -f makefile.vc test'
+# Test on Windows with MSVC native, using make
+    - name: "Windows/MSVC/Shared"
+      os: windows
+      compiler: cl
+      env:
+        - BUILD_DIR=win
+        - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
+        - CFGOPT="CC=cl --enable-threads --enable-symbols"
+      before_install:
+        - choco install make
+        - PATH="$PATH:$VCDIR"
+        - cd ${BUILD_DIR}
+      script:
+        - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
+        - cmd.exe /C 'vcvarsall.bat x64 && make test'
+    - name: "Windows/MSVC/Static"
+      os: windows
+      compiler: cl
+      env: *vcenv
+      before_install:
+        - choco install make
+        - PATH="$PATH:$VCDIR"
+        - cd ${BUILD_DIR}
+      script:
+        - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
+        - cmd.exe /C 'vcvarsall.bat x64 && make test'
+# Test on Windows with GCC native
     - name: "Windows/MSVC/Debug"
       os: windows
       compiler: cl
