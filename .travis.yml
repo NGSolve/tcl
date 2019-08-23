@@ -237,6 +237,15 @@ matrix:
       script:
         - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=static,msvcrt,threads -f makefile.vc all tcltest'
         - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=static,msvcrt,threads -f makefile.vc test'
+    - name: "Windows/MSVC/Debug/nmake"
+      os: windows
+      compiler: cl
+      env: *vcenv
+      before_install: *vcpreinst
+      install: []
+      script:
+        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=symbols,msvcrt,threads -f makefile.vc all tcltest'
+        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=symbols,msvcrt,threads -f makefile.vc test'
 # Test on Windows with MSVC native, using make
     - name: "Windows/MSVC/Shared"
       os: windows
@@ -244,7 +253,7 @@ matrix:
       env:
         - BUILD_DIR=win
         - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
-        - CFGOPT="CC=cl --enable-threads --enable-symbols"
+        - CFGOPT="CC=cl --enable-64bit"
       before_install:
         - choco install make
         - PATH="$PATH:$VCDIR"
@@ -255,7 +264,24 @@ matrix:
     - name: "Windows/MSVC/Static"
       os: windows
       compiler: cl
-      env: *vcenv
+      env:
+        - BUILD_DIR=win
+        - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
+        - CFGOPT="CC=cl --enable-64bit --disable-shared"
+      before_install:
+        - choco install make
+        - PATH="$PATH:$VCDIR"
+        - cd ${BUILD_DIR}
+      script:
+        - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
+        - cmd.exe /C 'vcvarsall.bat x64 && make test'
+    - name: "Windows/MSVC/Debug"
+      os: windows
+      compiler: cl
+      env:
+        - BUILD_DIR=win
+        - VCDIR="/C/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/VC/Auxiliary/Build"
+        - CFGOPT="CC=cl --enable-64bit --enable-symbols"
       before_install:
         - choco install make
         - PATH="$PATH:$VCDIR"
@@ -264,15 +290,6 @@ matrix:
         - cmd.exe /C 'vcvarsall.bat x64 && make all tcltest'
         - cmd.exe /C 'vcvarsall.bat x64 && make test'
 # Test on Windows with GCC native
-    - name: "Windows/MSVC/Debug"
-      os: windows
-      compiler: cl
-      env: *vcenv
-      before_install: *vcpreinst
-      install: []
-      script:
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=symbols,msvcrt,threads -f makefile.vc all tcltest'
-        - cmd.exe /C 'vcvarsall.bat x64 && nmake OPTS=symbols,msvcrt,threads -f makefile.vc test'
     - name: "Windows/GCC/Shared"
       os: windows
       compiler: gcc
